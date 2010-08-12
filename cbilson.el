@@ -9,8 +9,10 @@
 (set-variable 'scroll-step 1)
 (set-variable 'scroll-conservatively 5)
 (set-variable 'default-truncate-lines 1)
-(add-to-list 'load-path (concat dotfiles-dir "vendor"))
 (set-variable 'suggest-key-bindings t)
+
+(add-to-list 'load-path (concat dotfiles-dir "vendor"))
+(add-to-list 'load-path (concat dotfiles-dir "vendor/clojure-mode"))
 
 (setq browse-url-browser-function 'browse-url-generic
       browse-url-generic-program "google-chrome")
@@ -108,6 +110,7 @@
 ;; clojure stuff
 ;;
 (require 'slime)
+(require 'clojure-mode)
 (setq clojure-jar-file "/home/cbilson/src/clojure/clojure/clojure.jar")
 (setq clojure-command (concat "java -cp "
                               clojure-jar-file
