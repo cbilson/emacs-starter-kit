@@ -202,7 +202,8 @@
 
    ; Set indentation defaults. 
   (make-local-variable 'powershell-indent-width) 
-  (set (make-local-variable 'comment-start) "#") 
+  (set (make-local-variable 'comment-start) "#*+|<#*+")
+  (set (make-local-variable 'comment-end) "#>")
   (powershell-setup-imenu) 
   (run-hooks 'powershell-mode-hook)) 
 
