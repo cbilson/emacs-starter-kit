@@ -467,16 +467,14 @@ Example:
 
           ;; Trim prompt from the beginning of the output.
           ;; this can happen for the first command through
-          ;; the shell.  I think there's a race condition.
-          (if (string-match (concat "^" powershell-prompt-regex "\\(.*\\)\\'")
-                            powershell-command-reply)
-              (setq powershell-command-reply
-                    (substring powershell-command-reply
-                               (match-beginning 1)
-                               (match-end 1))))
-
-
-
+    ;; the shell.  I think there's a race condition.
+    (unless (null powershell-command-reply)
+        (if (string-match (concat "^" powershell-prompt-regex "\\(.*\\)\\'")
+                          powershell-command-reply)
+            (setq powershell-command-reply
+                  (substring powershell-command-reply
+                             (match-beginning 1)
+                             (match-end 1)))))
 
     ;; restore the original filter
     (set-process-filter proc original-filter)
@@ -487,12 +485,6 @@ Example:
 
     ;; the result:
     powershell-command-reply))
-
-
-
-
-
-
 
 (defun powershell-delete-process (&optional proc)
   (or proc
