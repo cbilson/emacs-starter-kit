@@ -2,6 +2,9 @@
 
 (color-theme-twilight)
 
+(load "gnuserv")
+(gnuserv-start)
+
 ;;
 ;; misc
 ;;
