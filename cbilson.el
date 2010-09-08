@@ -1,5 +1,7 @@
 ;;; My personalizations
 
+(color-theme-twilight)
+
 ;;
 ;; misc
 ;;
@@ -111,13 +113,21 @@
 ;;
 (require 'slime)
 (require 'clojure-mode)
+(require 'clojure-test-mode)
+
+(add-hook 'clojure-mode-hook (define-key clojure-test-mode-map (kbd "C-1") 'clojure-test-run-tests))
+
 (setq clojure-jar-file "/home/cbilson/src/clojure/clojure/clojure.jar")
 (setq clojure-command (concat "java -cp "
                               clojure-jar-file
-                              " clojure.main"
-                              " -server -Dfile.encoding=UTF-8"))
+                              " clojure.main"))
 
 (setq inferior-lisp-program clojure-command)
 
-
+;;
+;; git stuff
+;;
+(add-to-list 'load-path "~/.emacs.d/vendor/mo-git-blame")
+(autoload 'mo-git-blame-file "mo-git-blame" nil t)
+(autoload 'mo-git-blame-current "mo-git-blame" nil t)
 
