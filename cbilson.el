@@ -26,6 +26,7 @@
 (setq auto-mode-alist (cons '("\\.csproj$" . nxml-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("\\.fsproj$" . nxml-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("\\.kml$" . nxml-mode) auto-mode-alist))
+(setq auto-mode-alist (cons '("\\.conkererrc$" . js2-mode) auto-mode-alist))
 
 (org-remember-insinuate)
 (require 'wb-line-number)
@@ -37,9 +38,9 @@
 (global-set-key (kbd "C-<right>") 'forward-word)
 (global-set-key (kbd "C-c C-r") 'remember)
 
-(eval-after-load 'paredit
-  '(progn (define-key paredit-mode-map (kbd "C-<left>") 'backward-word)
-          (define-key paredit-mode-map (kbd "C-<right>") 'forward-word)))
+;; (eval-after-load 'paredit
+;;   '(progn (define-key paredit-mode-map (kbd "C-<left>") 'backward-word)
+;;           (define-key paredit-mode-map (kbd "C-<right>") 'forward-word)))
 
 ;;
 ;; fsharp-mode
@@ -115,14 +116,31 @@
 (require 'clojure-mode)
 (require 'clojure-test-mode)
 
-(add-hook 'clojure-mode-hook (define-key clojure-test-mode-map (kbd "C-1") 'clojure-test-run-tests))
+(add-hook 'clojure-mode-hook
+          '(lambda ()
+             (define-key clojure-mode-map (kbd "C-c c") 'comment-region)
+             (define-key clojure-mode-map (kbd "C-w") 'mark-sexp)
+             (define-key clojure-test-mode-map (kbd "C-1") 'clojure-test-run-tests)))
+
 
 (setq clojure-jar-file "/home/cbilson/src/clojure/clojure/clojure.jar")
 (setq clojure-command (concat "java -cp "
                               clojure-jar-file
                               " clojure.main"))
 
+(global-set-key "\C-x\C-a" '(lambda () (interactive) (ansi-term "/usr/bin/zsh")))
+
 (setq inferior-lisp-program clojure-command)
+
+(add-hook 'clojure-mode-hook 'paredit-mode)
+(autoload 'clojure-test-mode "clojure-test-mode" "Clojure test mode" t)
+(add-hook 'clojure-mode-hook
+          (lambda () (save-excursion
+                  (goto-char (point-min))
+                  (if (search-forward "(deftest" nil t)
+                      (clojure-test-mode)))))
+
+(add-hook 'clojure-mode-hook 'esk-remove-elc-on-save)
 
 ;;
 ;; git stuff
