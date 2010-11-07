@@ -1,6 +1,7 @@
 ;;; My personalizations
 
-(color-theme-twilight)
+(if window-system
+    (color-theme-blackboard))
 
 ;;
 ;; misc
@@ -37,6 +38,9 @@
 (global-set-key (kbd "C-<left>") 'backward-word)
 (global-set-key (kbd "C-<right>") 'forward-word)
 (global-set-key (kbd "C-c C-r") 'remember)
+(global-set-key (kbd "C-c w") 'rotate-windows)
+(global-set-key (kbd "C-x C-a") '(lambda () (interactive) (ansi-term "/usr/bin/zsh")))
+
 
 ;; (eval-after-load 'paredit
 ;;   '(progn (define-key paredit-mode-map (kbd "C-<left>") 'backward-word)
@@ -89,26 +93,6 @@
 (require 'rspec-mode)
 (add-hook 'rspec-mode-hook (define-key rspec-mode-keymap (kbd "C-1") 'rspec-verify-single))
 
-(when (eq system-type 'windows-nt)
-  ; without this emacs pauses a lot on window
-  ; see http://groups.google.com/group/gnu.emacs.help/browse_thread/thread/e3142de71f27b71b/72a40de2061f1a33?lnk=raot
-  (setq w32-get-true-file-attributes nil)
-  
-  ; to get a list of all the fonts: (insert (prin1-to-string (x-list-fonts "*")))
-  (setq w32-enable-synthesized-fonts t)
-
-  (set-default-font "-outline-Inconsolata-normal-normal-normal-mono-*-*-*-*-c-*-iso10646-1")
-
-  ;; (set-default-font "-outline-Consolas-normal-r-normal-normal-*-*-*-*-c-*-iso8859-1")
-  ;; (set-face-font 'italic "-outline-Consolas-normal-italic-normal-mono-*-*-*-*-c-*-iso8859-1")
-  ;; (set-face-font 'bold "-outline-Consolas-bold-normal-normal-mono-*-*-*-*-c-*-iso8859-1")
-
-  ;; (set-default-font "-outline-Envy Code R-normal-normal-normal-mono-*-*-*-*-c-*-iso10646-1")
-  ;; (set-face-font 'italic "-outline-Envy Code R-normal-italic-normal-mono-*-*-*-*-c-*-iso10646-1")
-  ;; (set-face-font 'bold "-outline-Envy Code R-bold-normal-normal-mono-*-*-*-*-c-*-iso10646-1")
-
-  )
-
 ;;
 ;; clojure stuff
 ;;
@@ -127,8 +111,6 @@
 (setq clojure-command (concat "java -cp "
                               clojure-jar-file
                               " clojure.main"))
-
-(global-set-key "\C-x\C-a" '(lambda () (interactive) (ansi-term "/usr/bin/zsh")))
 
 (setq inferior-lisp-program clojure-command)
 
@@ -149,3 +131,55 @@
 (autoload 'mo-git-blame-file "mo-git-blame" nil t)
 (autoload 'mo-git-blame-current "mo-git-blame" nil t)
 
+(defun toggle-fullscreen (&optional f)
+  "Toggles whether or not the window is fullscreen"
+  (interactive)
+  (set-frame-parameter nil 'fullscreen
+                       (if (frame-parameter nil 'fullscreen) nil 'fullboth)))
+
+(add-hook 'window-setup-hook 'toggle-fullscreen)
+
+(if (eq system-type 'windows-nt)
+    (progn 
+      ;; without this emacs pauses a lot on window
+      ;; see http://groups.google.com/group/gnu.emacs.help/browse_thread/thread/e3142de71f27b71b/72a40de2061f1a33?lnk=raot
+      (setq w32-get-true-file-attributes nil)
+      
+      ;; to get a list of all the fonts: (insert (prin1-to-string (x-list-fonts "*")))
+      (setq w32-enable-synthesized-fonts t)
+
+      ;; (set-default-font "-outline-Consolas-normal-r-normal-normal-*-*-*-*-c-*-iso8859-1")
+      ;; (set-face-font 'italic "-outline-Consolas-normal-italic-normal-mono-*-*-*-*-c-*-iso8859-1")
+      ;; (set-face-font 'bold "-outline-Consolas-bold-normal-normal-mono-*-*-*-*-c-*-iso8859-1")
+      
+      ;; (set-default-font "-outline-Envy Code R-normal-normal-normal-mono-*-*-*-*-c-*-iso10646-1")
+      ;; (set-face-font 'italic "-outline-Envy Code R-normal-italic-normal-mono-*-*-*-*-c-*-iso10646-1")
+      ;; (set-face-font 'bold "-outline-Envy Code R-bold-normal-normal-mono-*-*-*-*-c-*-iso10646-1")
+      (set-default-font "-outline-Inconsolata-normal-normal-normal-mono-*-*-*-*-c-*-iso10646-1"))
+  (progn
+    (set-default-font "-bitstream-Meslo LG L-normal-normal-normal-*-*-*-*-*-m-0-iso10646-1")))
+
+;;
+;; Rotates window positions
+;;
+(defun rotate-windows ()
+  "Rotate your windows"
+  (interactive)
+  (cond ((not (> (count-windows) 1)) (message "You can't rotate a single window!"))
+        (t
+         (setq i 1)
+         (setq numWindows (count-windows))
+         (while  (< i numWindows)
+           (let* (
+                  (w1 (elt (window-list) i))
+                  (w2 (elt (window-list) (+ (% i numWindows) 1)))
+                  (b1 (window-buffer w1))
+                  (b2 (window-buffer w2))
+                  (s1 (window-start w1))
+                  (s2 (window-start w2))
+                  )
+             (set-window-buffer w1  b2)
+             (set-window-buffer w2 b1)
+             (set-window-start w1 s2)
+             (set-window-start w2 s1)
+             (setq i (1+ i)))))))
