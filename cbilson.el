@@ -16,6 +16,7 @@
 
 (add-to-list 'load-path (concat dotfiles-dir "vendor"))
 (add-to-list 'load-path (concat dotfiles-dir "vendor/clojure-mode"))
+(add-to-list 'load-path (concat dotfiles-dir "vendor/midje"))
 
 (setq browse-url-browser-function 'browse-url-generic
       browse-url-generic-program "google-chrome")
@@ -99,12 +100,16 @@
 (require 'slime)
 (require 'clojure-mode)
 (require 'clojure-test-mode)
+(require 'midje-mode)
 
 (add-hook 'clojure-mode-hook
           '(lambda ()
              (define-key clojure-mode-map (kbd "C-c c") 'comment-region)
-             (define-key clojure-mode-map (kbd "C-w") 'mark-sexp)
-             (define-key clojure-test-mode-map (kbd "C-1") 'clojure-test-run-tests)))
+             (define-key clojure-mode-map (kbd "C-c u") 'uncomment-region)
+             (define-key clojure-mode-map (kbd "C-S-w") 'mark-sexp)
+             (define-key clojure-test-mode-map (kbd "C-1") 'midje-check-fact)
+             (define-key clojure-test-mode-map (kbd "C-2") 'midje-recheck-last-fact-checked)
+             'midje-mode))
 
 
 (setq clojure-jar-file "/home/cbilson/src/clojure/clojure/clojure.jar")
