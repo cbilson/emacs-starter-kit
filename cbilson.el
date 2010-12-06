@@ -40,8 +40,7 @@
 (global-set-key (kbd "C-<right>") 'forward-word)
 (global-set-key (kbd "C-c C-r") 'remember)
 (global-set-key (kbd "C-c w") 'rotate-windows)
-(global-set-key (kbd "C-x C-a") '(lambda () (interactive) (ansi-term "/usr/bin/zsh")))
-
+(global-set-key (kbd "C-x C-a") '(lambda () (interactive) (ansi-term "/bin/zsh")))
 
 ;; (eval-after-load 'paredit
 ;;   '(progn (define-key paredit-mode-map (kbd "C-<left>") 'backward-word)
@@ -95,6 +94,36 @@
 (add-hook 'rspec-mode-hook (define-key rspec-mode-keymap (kbd "C-1") 'rspec-verify-single))
 
 ;;
+;; python stuff
+;;
+(autoload 'pymacs-apply "pymacs")
+(autoload 'pymacs-call "pymacs")
+(autoload 'pymacs-eval "pymacs" nil t)
+(autoload 'pymacs-exec "pymacs" nil t)
+(autoload 'pymacs-load "pymacs" nil t)
+
+(defun load-ropemacs ()
+  "Load pymacs and ropemacs"
+  (interactive)
+  (require 'pymacs)
+  (pymacs-load "ropemacs" "rope-")
+  ;; Automatically save project python buffers before refactorings
+  (setq ropemacs-confirm-saving 'nil)
+  )
+
+;; (eval-after-load "pymacs"
+;;   ;; '(add-to-list 'pymacs-load-path YOUR-PYMACS-DIRECTORY)
+;;   (load-ropemacs)
+;;   )
+
+;;
+;; haskel stuff
+;;
+(require 'haskell-mode)
+(setq auto-mode-alist (cons '("\\.hs$" . haskell-mode) auto-mode-alist))
+
+
+;;
 ;; clojure stuff
 ;;
 (require 'slime)
@@ -110,7 +139,6 @@
              (define-key clojure-test-mode-map (kbd "C-1") 'midje-check-fact)
              (define-key clojure-test-mode-map (kbd "C-2") 'midje-recheck-last-fact-checked)
              'midje-mode))
-
 
 (setq clojure-jar-file "/home/cbilson/src/clojure/clojure/clojure.jar")
 (setq clojure-command (concat "java -cp "
@@ -129,6 +157,29 @@
 
 (add-hook 'clojure-mode-hook 'esk-remove-elc-on-save)
 
+(add-hook 'slime-mode-hook (lambda () (setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol)))
+
+(defun sl4 ()
+  "Make it easier to connect to slime"
+  (interactive)
+  (slime-connect "localhost" 4005))
+
+(defun lein-swank ()
+  (interactive)
+  (let* ((project-file (locate-dominating-file default-directory "project.clj"))
+        (root (if (not project-file) (locate-dominating-file "~/src/leiningen" "project.clj") project-file)))
+    (when (not root)
+      (error "Not in a Leiningen project."))
+    ;; you can customize slime-port using .dir-locals.el
+    (shell-command (format "cd %s && lein swank %s &" root slime-port)
+                   "*lein-swank*")
+    (set-process-filter (get-buffer-process "*lein-swank*")
+                        (lambda (process output)
+                          (when (string-match "Connection opened on" output)
+                            (slime-connect "localhost" slime-port)
+                            (set-process-filter process nil))))
+    (message "Starting swank server...")))
+
 ;;
 ;; git stuff
 ;;
@@ -142,7 +193,7 @@
   (set-frame-parameter nil 'fullscreen
                        (if (frame-parameter nil 'fullscreen) nil 'fullboth)))
 
-(add-hook 'window-setup-hook 'toggle-fullscreen)
+;;(add-hook 'window-setup-hook 'toggle-fullscreen)
 
 (if (eq system-type 'windows-nt)
     (progn 
@@ -188,3 +239,48 @@
              (set-window-start w1 s2)
              (set-window-start w2 s1)
              (setq i (1+ i)))))))
+
+;;
+;; Wanderlust
+;;
+(autoload 'wl "wl" "Wanderlust" t)
+(autoload 'wl-other-frame "wl" "Wanderlust on new frame." t)
+(autoload 'wl-draft "wl-draft" "Write draft with Wanderlust." t)
+
+;; IMAP
+(setq elmo-imap4-default-server "imap.gmail.com")
+(setq elmo-imap4-default-user "cbilson@gmail.com") 
+(setq elmo-imap4-default-authenticate-type 'clear) 
+(setq elmo-imap4-default-port '993)
+(setq elmo-imap4-default-stream-type 'ssl)
+
+(setq elmo-imap4-use-modified-utf7 t) 
+
+;; SMTP
+(setq wl-smtp-connection-type 'starttls)
+(setq wl-smtp-posting-port 587)
+(setq wl-smtp-authenticate-type "plain")
+(setq wl-smtp-posting-user "cbilson")
+(setq wl-smtp-posting-server "smtp.gmail.com")
+(setq wl-local-domain "gmail.com")
+
+(setq wl-default-folder "%inbox")
+(setq wl-default-spec "%")
+(setq wl-draft-folder "%[Gmail]/Drafts") ; Gmail IMAP
+(setq wl-trash-folder "%[Gmail]/Trash")
+
+(setq wl-folder-check-async t) 
+
+(setq elmo-imap4-use-modified-utf7 t)
+
+(autoload 'wl-user-agent-compose "wl-draft" nil t)
+(if (boundp 'mail-user-agent)
+    (setq mail-user-agent 'wl-user-agent))
+(if (fboundp 'define-mail-user-agent)
+    (define-mail-user-agent
+      'wl-user-agent
+      'wl-user-agent-compose
+      'wl-draft-send
+      'wl-draft-kill
+      'mail-send-hook))
+
