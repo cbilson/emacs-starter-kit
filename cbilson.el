@@ -1,7 +1,13 @@
 ;;; My personalizations
 
 (if window-system
-    (color-theme-blackboard))
+    (color-theme-twilight))
+
+;;
+;; Package Management
+;;
+(add-to-list 'package-archives
+             '("technomancy" . "http://repo.technomancy.us/emacs/") t)
 
 ;;
 ;; misc
@@ -17,6 +23,7 @@
 (add-to-list 'load-path (concat dotfiles-dir "vendor"))
 (add-to-list 'load-path (concat dotfiles-dir "vendor/clojure-mode"))
 (add-to-list 'load-path (concat dotfiles-dir "vendor/midje"))
+(add-to-list 'load-path (concat dotfiles-dir "elpa-to-submit/fsharp"))
 
 (setq browse-url-browser-function 'browse-url-generic
       browse-url-generic-program "google-chrome")
@@ -49,6 +56,7 @@
 ;;
 ;; fsharp-mode
 ;;
+(require 'fsharp)
 (setq auto-mode-alist (cons '("\\.fs[iylx]?$" . fsharp-mode) auto-mode-alist))
 (autoload 'fsharp-mode "fsharp" "Major mode for editing F# code." t)
 (autoload 'run-fsharp "inf-fsharp" "Run an inferior F# process." t)
@@ -137,8 +145,9 @@
              (define-key clojure-mode-map (kbd "C-c u") 'uncomment-region)
              (define-key clojure-mode-map (kbd "C-S-w") 'mark-sexp)
              (define-key clojure-test-mode-map (kbd "C-1") 'midje-check-fact)
-             (define-key clojure-test-mode-map (kbd "C-2") 'midje-recheck-last-fact-checked)
-             'midje-mode))
+             (define-key clojure-test-mode-map (kbd "C-2") 'midje-recheck-last-fact-checked)))
+
+(add-hook 'clojure-mode-hook 'midje-mode)
 
 (setq clojure-jar-file "/home/cbilson/src/clojure/clojure/clojure.jar")
 (setq clojure-command (concat "java -cp "
@@ -158,6 +167,7 @@
 (add-hook 'clojure-mode-hook 'esk-remove-elc-on-save)
 
 (add-hook 'slime-mode-hook (lambda () (setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol)))
+(add-hook 'slime-repl-mode-hook 'clojure-mode-font-lock-setup)
 
 (defun sl4 ()
   "Make it easier to connect to slime"
@@ -167,7 +177,7 @@
 (defun lein-swank ()
   (interactive)
   (let* ((project-file (locate-dominating-file default-directory "project.clj"))
-        (root (if (not project-file) (locate-dominating-file "~/src/leiningen" "project.clj") project-file)))
+        (root (if (not project-file) (locate-dominating-file "~/src/clojure/scratch" "project.clj") project-file)))
     (when (not root)
       (error "Not in a Leiningen project."))
     ;; you can customize slime-port using .dir-locals.el
@@ -179,6 +189,11 @@
                             (slime-connect "localhost" slime-port)
                             (set-process-filter process nil))))
     (message "Starting swank server...")))
+
+(defun lein-scratch ()
+  (interactive)
+  (cd "~/src/clojure/scratch")
+  (lein-swank))
 
 ;;
 ;; git stuff
