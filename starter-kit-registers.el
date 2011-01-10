@@ -11,7 +11,7 @@
 (dolist (r `((?i (file . ,(concat dotfiles-dir "init.el")))
              (?b (file . ,(concat dotfiles-dir "starter-kit-bindings.el")))
              (?r (file . ,(concat dotfiles-dir "starter-kit-registers.el")))
-             (?c (file . ,(concat dotfiles-dir "cbilson.el")))))
+             (?c (file . ,(concat dotfiles-dir "Chris.Bilson.el")))))
   (set-register (car r) (cadr r)))
 
 (provide 'starter-kit-registers)

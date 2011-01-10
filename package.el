@@ -6,7 +6,6 @@
 ;; Created: 10 Mar 2007
 ;; Version: 0.9
 ;; Keywords: tools
-
 ;; This file is part of GNU Emacs.
 
 ;; GNU Emacs is free software; you can redistribute it and/or modify
