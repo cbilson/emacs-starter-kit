@@ -1,5 +1,8 @@
 
 (if window-system
-    (color-theme-zenburn))
+    (progn
+      (require 'color-theme)
+      (require 'color-theme-sunburst)
+      (color-theme-sunburst)))
 
 (provide 'ui-customizations)
