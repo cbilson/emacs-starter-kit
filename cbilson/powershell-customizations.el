@@ -2,7 +2,7 @@
 ;; powershell mode
 ;;
 (autoload 'powershell-mode "powershell-mode" "Major mode for editing powershell scripts." t)
-(setq auto-mode-alist
-      (cons '("\\.ps1$" . powershell-mode) auto-mode-alist))
-      
+(add-to-list 'auto-mode-alist '("\\.ps1$" . powershell-mode))
+(add-to-list 'auto-mode-alist '("\\.psm1$" . powershell-mode))
+
 (provide 'powershell-customizations)
