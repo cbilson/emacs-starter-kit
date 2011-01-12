@@ -14,4 +14,3 @@
 ;; (require 'rspec-mode)
 ;; (add-hook 'rspec-mode-hook (define-key rspec-mode-keymap (kbd "C-1") 'rspec-verify-single))
 
-(provide 'ruby-customizations)

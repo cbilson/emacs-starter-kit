@@ -43,4 +43,3 @@
       'wl-draft-kill
       'mail-send-hook))
 
-(provide 'mail-customizations)

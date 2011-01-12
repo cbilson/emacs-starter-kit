@@ -21,4 +21,3 @@
   (progn
     (set-default-font "-bitstream-Meslo LG L-normal-normal-normal-*-*-*-*-*-m-0-iso10646-1")))
 
-(provide 'windows-customizations)

@@ -75,4 +75,3 @@
              (setq i (1+ i)))))))
 
 
-(provide 'misc-customizations)

@@ -18,4 +18,3 @@
           "\"C:\\Program Files\\Microsoft F#\\v4.0\\fsc.exe\""
         "~/bin/fsc.exe --resident"))
 
-(provide 'fsharp-customizations)

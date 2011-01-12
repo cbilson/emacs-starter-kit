@@ -78,4 +78,3 @@
   (cd clojure-scratch-project-dir)
   (lein-swank))
 
-(provide 'clojure-customizations)

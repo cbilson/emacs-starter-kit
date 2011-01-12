@@ -21,4 +21,3 @@
 ;;   (load-ropemacs)
 ;;   )
 
-(provide 'python-customizations)
