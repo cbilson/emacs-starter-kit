@@ -9,6 +9,7 @@
 (set-variable 'scroll-conservatively 5)
 (set-variable 'default-truncate-lines 1)
 (set-variable 'suggest-key-bindings t)
+(set-variable 'transient-mark-mode nil)
 
 (add-to-list 'load-path (concat dotfiles-dir "vendor"))
 (add-to-list 'load-path (concat dotfiles-dir "vendor/clojure-mode"))
