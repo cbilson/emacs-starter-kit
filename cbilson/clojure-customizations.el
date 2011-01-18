@@ -29,7 +29,6 @@
 (defvar clojure-scratch-project-dir
   (cond ((file-exists-p "/home/cbilson/src/clojure/scratch") "/home/cbilson/src/clojure/scratch")
         ((file-exists-p "C:/projects/personal/clojure/scratch") "C:/projects/personal/clojure/scratch")))
-        
 
 (setq clojure-command (concat "java -cp "
                               clojure-jar-file
@@ -58,7 +57,9 @@
 (defun lein-swank ()
   (interactive)
   (let* ((project-file (locate-dominating-file default-directory "project.clj"))
-         (root (if (not project-file) (locate-dominating-file (concat clojure-scratch-project-dir "project.clj") project-file)))
+         (root (if (not project-file)
+                   (concat clojure-scratch-project-dir "/project.clj")
+                    project-file)))
     (when (not root)
       (error "Not in a Leiningen project."))
     ;; you can customize slime-port using .dir-locals.el
@@ -69,7 +70,7 @@
                           (when (string-match "Connection opened on" output)
                             (slime-connect "localhost" slime-port)
                             (set-process-filter process nil))))
-    (message "Starting swank server..."))))
+    (message "Starting swank server...")))
 
 (defun lein-scratch ()
   (interactive)
