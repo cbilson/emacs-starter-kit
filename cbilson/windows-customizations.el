@@ -17,7 +17,5 @@
       ;; (set-face-font 'italic "-outline-Envy Code R-normal-italic-normal-mono-*-*-*-*-c-*-iso10646-1")
       ;; (set-face-font 'bold "-outline-Envy Code R-bold-normal-normal-mono-*-*-*-*-c-*-iso10646-1")
       ;; (set-default-font "-outline-Inconsolata-normal-normal-normal-mono-*-*-*-*-c-*-iso10646-1"))
-      )
-  (progn
-    (set-default-font "-bitstream-Meslo LG L-normal-normal-normal-*-*-*-*-*-m-0-iso10646-1")))
+      ))
 
