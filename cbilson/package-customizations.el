@@ -8,8 +8,9 @@
                    clojure-test-mode
                    color-theme
                    dired-isearch
+                   durendal
                    haml-mode
-                   js2-mode
+                   idle-highlight
                    markdown-mode
                    muse
                    org
