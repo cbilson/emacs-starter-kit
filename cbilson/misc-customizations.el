@@ -95,6 +95,7 @@ This is the same as using \\[set-mark-command] with the prefix argument."
 
 (global-set-key (kbd "C-@") 'push-mark-no-activate)
 (global-set-key (kbd "M-`") 'jump-to-mark)
+(global-set-key (kbd "C-x c") 'comment-region)
 (define-key global-map [remap exchange-point-and-mark] 'exchange-point-and-mark-no-activate)
 
 (require 'visible-mark)
