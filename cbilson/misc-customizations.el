@@ -100,3 +100,9 @@ This is the same as using \\[set-mark-command] with the prefix argument."
 
 (require 'visible-mark)
 (visible-mark-mode)
+
+(defun remove-dos-eol ()
+  "Removes the disturbing '^M' showing up in files containing mixed UNIX and DOS line endings."
+  (interactive)
+  (setq buffer-display-table (make-display-table))
+  (aset buffer-display-table ?\^M []))
