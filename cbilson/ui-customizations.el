@@ -9,7 +9,9 @@
       ;(color-theme-clarity)
       ;(color-theme-dark-blue2)
       ;(color-theme-sunburst)
-      (color-theme-solarized 'dark)
+      ;(color-theme-solarized 'dark)
+      ;(color-theme-solarized 'light)
+      (color-theme-blackboard)
       ))
 
 ;; stolen from https://github.com/nimms/emacs-starter-kit/commit/b43f4f7e5f885c6f2c804e6221fe5c99db4908db
