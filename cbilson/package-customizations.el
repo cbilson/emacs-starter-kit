@@ -2,6 +2,7 @@
 ;;
 ;; Package Management
 ;;
+(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
 
 ;; additional packages I want installed
 (dolist (package '(clojure-mode
